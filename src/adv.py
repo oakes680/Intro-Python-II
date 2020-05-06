@@ -44,6 +44,7 @@ room['treasure'].s_to = room['narrow']
 #this is setting  player.name and player.current_room
 player = Player(input("What is your name?"), room['outside'])
 
+
 print(f"Hello, {player.name} \n")
 print(player.current_room)
 
