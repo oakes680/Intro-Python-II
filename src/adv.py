@@ -1,4 +1,6 @@
 from room import Room
+from player import Player
+from item import Item
 
 # Declare all the rooms
 
@@ -21,6 +23,23 @@ chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
 
+items = [Item('jeans', 'denim jeans'), Item('shirt', 'short sleeve shirt')]
+
+items1 = [Item('knife', 'really big knife'), Item('pen', 'blue ink')]
+
+items2 = [Item('taco', 'carne asada'), Item('paper', 'white paper')]
+
+items3 = [Item('towel', 'green beach towel'), Item('camera', 'canon 5d')]
+
+items4 = [Item('computer', 'laptop'), Item('shoes', 'adidas')]
+
+room['outside'].items = items
+room['foyer'].items = items1
+room['overlook'].items = items2
+room['narrow'].items = items3
+room['treasure'].items = items4
+
+
 
 # Link rooms together
 
@@ -33,9 +52,20 @@ room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
 
+
 #
 # Main
 #
+
+## 
+
+#this is setting  player.name and player.current_room
+player = Player(input("What is your name?"), room['outside'])
+
+
+print(f"Hello, {player.name} \n")
+print(player.current_room)
+
 
 # Make a new player object that is currently in the 'outside' room.
 
@@ -49,3 +79,26 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+valid_verbs = {'take', 'get', 'drop', 'i', 'inventory'}
+
+while True:
+    cmd = input("\n-->")
+    if cmd == "q":
+        print("GoodBye")
+        exit(0)
+    elif cmd in ("n", "s", "e", "w"):
+        player.travel(cmd)
+    elif cmd.split(" ")[0] in valid_verbs:
+        verb = cmd.split(" ")[0] 
+        if verb == 'take' or verb == 'get':
+            item_name = cmd.split(" ")[1]
+            print(player.on_take(item_name))
+        elif verb == 'drop':
+            item_name = cmd.split(" ")[1]
+            print(player.on_drop(item_name))
+        elif verb == 'i' or 'inventory':
+            for item in player.items:
+                print(item.name)
+    else:
+        print("i did not understand that command.")
